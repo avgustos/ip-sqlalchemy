@@ -8,13 +8,12 @@ from create_models import Base
 #connection_string = "sqlite:///" + os.path.join(BASE_DIR, 'ip.db')
 
 # the connection string to my database
-connection_string = "sqlite+pysqlite:///M:/lab/projects/ip23/src/ip.db"
+connection_string = "sqlite+pysqlite:///M:/lab/projects/ip23/src/test.db"
 
 # create an SQLAlchemy engine
 engine = create_engine(connection_string, echo=True, future=True)
 
-# create all tables
-# this is called from main.py
+# called from `main.py`, it is using `create_models.py` to create all tables
 ignite = Base.metadata.create_all(engine)
 
 Session = sessionmaker()
