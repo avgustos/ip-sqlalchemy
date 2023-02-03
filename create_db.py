@@ -14,6 +14,6 @@ connection_string = "sqlite+pysqlite:///M:/lab/projects/ip23/src/test.db"
 engine = create_engine(connection_string, echo=True, future=True)
 
 # called from `main.py`, it is using `create_models.py` to create all tables
-ignite = Base.metadata.create_all(engine)
+create_schema = Base.metadata.create_all(engine)
 
 Session = sessionmaker()
