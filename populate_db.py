@@ -1,6 +1,13 @@
-from create_db import Session
-from create_db import engine
-from create_models import Client, Sex, datetime
+# we add this in order to import from different directories
+import sys
+sys.path.append("M:/lab/projects/ip23/src/models")
+# sys.path.append("M:/lab/projects/ip23/src/views")
+# sys.path.append("M:/lab/projects/ip23/src/controllers")
+
+from create_db_schema import Session
+from create_db_schema import engine
+
+from models import clients, lookup_tables
 
 """
 In this module we add new records to tables `tbl_clients` and `tlkp_sex_ids`
@@ -71,18 +78,18 @@ def populate_tables():
     local_session = Session(bind=engine)
 
     for client in new_clients:
-        new_client = Client(client_lname=client["client_lname"],
+        new_client = clients.Client(client_lname=client["client_lname"],
                             client_fname=client["client_fname"],
                             client_fathers_name=client["client_fathers_name"],
                             client_sex_id=client["client_sex_id"],
-                            client_birthdate=datetime.strptime(client["client_birthdate"],'%d-%m-%Y')
+                            client_birthdate=clients.datetime.strptime(client["client_birthdate"],'%d-%m-%Y')
                             )
         print(new_client)
         local_session.add(new_client)
         local_session.commit()
 
     for sex_id in new_sex_ids:
-        new_sex_id = Sex(sex_id=sex_id["sex_id"],
+        new_sex_id = lookup_tables.Sex(sex_id=sex_id["sex_id"],
                         sex_description=sex_id["sex_description"],
                         )
         print(new_sex_id)
