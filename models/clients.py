@@ -1,7 +1,9 @@
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from base_class import BaseClass, Column, Integer, String, DateTime, datetime, ForeignKey, desc, relationship
 
-
-#for the next line we need import Base
+# we declare class Client as a subclass of Base
+# (for the next line we need to have BaseClass already imported)
 class Client(BaseClass.Base):
     
     """
@@ -14,8 +16,9 @@ class Client(BaseClass.Base):
     delete_cliet
     order_client_by()
     __repr__()
-
+    
     """
+
     __tablename__ = 'tbl_clients'
     #for the next line we need import Column, Integer
     client_id = Column(Integer(), primary_key=True)
@@ -34,94 +37,132 @@ class Client(BaseClass.Base):
 
 
     def create_client():
-        from create_db_schema import Session
-        from create_db_schema import engine
+        
+        connection_string = "sqlite+pysqlite:///M:/lab/projects/ip23/src/test.db"
+        engine = create_engine(connection_string, echo=True, future=True)
 
+        Session = sessionmaker()
+        # create an instance of the Session class from the sqlalchemy package
         local_session = Session(bind=engine)
 
-        new_client = Client(client_lname = "Αυτός την πούστισε", client_fname = "Πάει για σβήσιμο!", client_fathers_name = "Δεν έχει καμιά σημασία", client_sex=1, client_birthdate = datetime.strptime("01-01-1900",'%d-%m-%Y') )
+        # it is better if we close all open sessions after we finish
+        try:
+            local_session.close()
+            new_client = Client(client_lname = "Αυτός την πούστισε", client_fname = "Πάει για σβήσιμο!", client_fathers_name = "Δεν έχει καμιά σημασία", client_sex=1, client_birthdate = datetime.strptime("01-01-1900",'%d-%m-%Y') )
 
-        print(new_client)
+            print(new_client)
 
-        local_session.add(new_client)
-        local_session.commit()
+            local_session.add(new_client)
+            local_session.commit()
+        finally:
+            local_session.close()
 
 
     def delete_client():
-        from create_db_schema import Session
-        from create_db_schema import engine
+       
+        connection_string = "sqlite+pysqlite:///M:/lab/projects/ip23/src/test.db"
+        engine = create_engine(connection_string, echo=True, future=True)
 
+        Session = sessionmaker()
+        # create an instance of the Session class from the sqlalchemy package
         local_session = Session(bind=engine)
 
-        to_be_deleted_client = local_session.query(Client).filter(Client.client_lname=="Αυτός την πούτσισε").first()
+        # it is better if we close all open sessions after we finish
+        try:
+            to_be_deleted_client = local_session.query(Client).filter(Client.client_lname=="Αυτός την πούτσισε").first()
 
-        if to_be_deleted_client:
+            if to_be_deleted_client:
 
-            local_session.delete(to_be_deleted_client)
-            local_session.commit()
-        else:
-            print("Ο πελάτης που προσπαθείς να διαγράψεις δεν υπάρχει!")
-
+                local_session.delete(to_be_deleted_client)
+                local_session.commit()
+            else:
+                print("Ο πελάτης που προσπαθείς να διαγράψεις δεν υπάρχει!")  
+        finally:
+            local_session.close()
+        
 
     def retrieve_client():
-        #from main import engine, Session, Client
-        from create_db_schema import Session
-        from create_db_schema import engine
+       
+        connection_string = "sqlite+pysqlite:///M:/lab/projects/ip23/src/test.db"
+        engine = create_engine(connection_string, echo=True, future=True)
 
+        Session = sessionmaker()
+        # create an instance of the Session class from the sqlalchemy package
         local_session = Session(bind=engine)
 
-        #returns all clients
-        clients = local_session.query(Client).all()
-        for client in clients:
-            print(client.client_fname, client.client_lname, client.client_birthdate)
+        # it is better if we close all open sessions after we finish
+        try:
+            #returns all clients
+            clients = local_session.query(Client).all()
+            for client in clients:
+                print(client.client_fname, client.client_lname, client.client_birthdate)
 
-        #returns a specific client
-        who_I_am_looking_for = local_session.query(Client).filter(Client.client_lname == "Mavridis-Updated").first()
+            #returns a specific client
+            who_I_am_looking_for = local_session.query(Client).filter(Client.client_lname == "Mavridis-Updated").first()
 
-        print(who_I_am_looking_for)
+            print(who_I_am_looking_for)
+        finally:
+            local_session.close()
+
+        
 
 
     def update_client():
-        from create_db_schema import Session
-        from create_db_schema import engine
+        
+        connection_string = "sqlite+pysqlite:///M:/lab/projects/ip23/src/test.db"
+        engine = create_engine(connection_string, echo=True, future=True)
 
+        Session = sessionmaker()
+        # create an instance of the Session class from the sqlalchemy package
         local_session = Session(bind=engine)
 
-        client_to_update = local_session.query(Client).filter(Client.client_lname=="Mitropoulos").first()
+        # it is better if we close all open sessions after we finish
+        try:
+            client_to_update = local_session.query(Client).filter(Client.client_lname=="Mitropoulos").first()
 
-        if client_to_update:
-            # the following 4 lines are alternative search filters
-            # client_to_update.client_lname = ""
-            # client_to_update.client_fname = ""
-            # client_to_update.client_fathers_name = ""
-            # client_to_update.client_sex = 1
-            client_to_update.client_birthdate = datetime.strptime("15-05-2012",'%d-%m-%Y')
-            local_session.commit()
-        else:
-            print("Ο πελάτης που θέλεις να διορθώσεις δεν υπάρχει!")
+            if client_to_update:
+                # the following 4 lines are alternative search filters
+                # client_to_update.client_lname = ""
+                # client_to_update.client_fname = ""
+                # client_to_update.client_fathers_name = ""
+                # client_to_update.client_sex = 1
+                client_to_update.client_birthdate = datetime.strptime("15-05-2012",'%d-%m-%Y')
+                local_session.commit()
+            else:
+                print("Ο πελάτης που θέλεις να διορθώσεις δεν υπάρχει!")
+        finally:
+            local_session.close()
+
+        
 
 
     def order_client_by():
-        from create_db_schema import Session
-        from create_db_schema import engine
-       
+        
+        connection_string = "sqlite+pysqlite:///M:/lab/projects/ip23/src/test.db"
+        engine = create_engine(connection_string, echo=True, future=True)
+
+        Session = sessionmaker()
+        # create an instance of the Session class from the sqlalchemy package
         local_session = Session(bind=engine)
 
-        clients_asc = local_session.query(Client).order_by(Client.client_lname).all()
+        # it is better if we close all open sessions after we finish
+        try:
+            clients_asc = local_session.query(Client).order_by(Client.client_lname).all()
 
-        # ascending order
-        for client in clients_asc:
-            print(f"Retrieved Clients: {client.client_lname, client.client_fname, client.client_birthdate}")
+            # ascending order
+            for client in clients_asc:
+                print(f"Retrieved Clients: {client.client_lname, client.client_fname, client.client_birthdate}")
 
-        print("===========================")
+            print("===========================")
 
-        clients_desc = local_session.query(Client).order_by(desc(Client.client_lname)).all()
+            clients_desc = local_session.query(Client).order_by(desc(Client.client_lname)).all()
 
-        # descending order
-        # need to import desc to do this!
-        for client in clients_desc:
-            print(f"Ordered Descending {client.client_lname, client.client_fname, client.client_birthdate}")
-
+            # descending order
+            # need to import desc to do this!
+            for client in clients_desc:
+                print(f"Ordered Descending {client.client_lname, client.client_fname, client.client_birthdate}")
+        finally:
+            local_session.close()
 
     def __repr__(self):
         tab = '\t'

@@ -1,7 +1,10 @@
-import create_db_schema, populate_db
+from database import Database
 
-# create the db schema
-create_db_schema.create_schema
+#create an instance of the database. This enables us to call the two methods
+db = Database()
 
-#populate tables
-populate_db.populate_tables
+# create the db
+db.create_db()
+
+# #populate tables
+db.populate_db()
