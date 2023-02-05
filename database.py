@@ -36,6 +36,40 @@ class Database():
 
         Session = sessionmaker()
         local_session = Session(bind=engine)
+   
+        client_status_ids = [
+                {
+                    "client_status_id":-1,
+                    "client_status_description":""
+                },
+                {
+                    "client_status_id":1,
+                    "client_status_description":"ΕΝΕΡΓΟΣ"
+                },
+                {
+                    "client_status_id":2,
+                    "client_status_description":"ΜΗ ΕΝΕΡΓΟΣ"
+                },
+                {
+                    "client_status_id":3,
+                    "client_status_description":"ΥΠΟΨΗΦΙΟΣ"
+                },
+            ]
+     
+        sex_ids = [
+                {
+                    "sex_id":-1,
+                    "sex_description":""
+                },
+                {
+                    "sex_id":1,
+                    "sex_description":"ΑΝΔΡΑΣ"
+                },
+                {
+                    "sex_id":2,
+                    "sex_description":"ΓΥΝΑΙΚΑ"
+                },
+            ]
 
         new_clients = [
             {
@@ -70,7 +104,7 @@ class Database():
                 "client_lname":"Mitropoulos",
                 "client_fname":"Avgustos",
                 "client_fathers_name":"Unknown Father",
-                "client_sex_id":2,
+                "client_sex_id":1,
                 "client_birthdate":"15-05-2012"
             },
             {
@@ -80,24 +114,29 @@ class Database():
                 "client_sex_id":1,
                 "client_birthdate":"15-05-2012"
             },
-            ]
-
-        new_sex_ids = [
-                {
-                    "sex_id":-1,
-                    "sex_description":""
-                },
-                {
-                    "sex_id":1,
-                    "sex_description":"ΑΝΔΡΑΣ"
-                },
-                {
-                    "sex_id":2,
-                    "sex_description":"ΓΥΝΑΙΚΑ"
-                },
-            ]
-       
+        ]
+   
         try:
+
+            # insert records for client status ids
+            for client_status_id in client_status_ids:
+                client_status_id = lookup_tables.ClientStatus(client_status_id=client_status_id["client_status_id"],
+                                client_status_description=client_status_id["client_status_description"],
+                                )
+                print(client_status_id)
+                local_session.add(client_status_id)
+                local_session.commit()
+
+            # insert records for sex ids
+            for sex_id in sex_ids:
+                new_sex_id = lookup_tables.Sex(sex_id=sex_id["sex_id"],
+                                sex_description=sex_id["sex_description"],
+                                )
+                print(new_sex_id)
+                local_session.add(new_sex_id)
+                local_session.commit()
+
+            # insert records for new clients
             for client in new_clients:
                 new_client = clients.Client(client_lname=client["client_lname"],
                                     client_fname=client["client_fname"],
@@ -109,12 +148,5 @@ class Database():
                 local_session.add(new_client)
                 local_session.commit()
 
-            for sex_id in new_sex_ids:
-                new_sex_id = lookup_tables.Sex(sex_id=sex_id["sex_id"],
-                                sex_description=sex_id["sex_description"],
-                                )
-                print(new_sex_id)
-                local_session.add(new_sex_id)
-                local_session.commit()
         finally:
             local_session.close()

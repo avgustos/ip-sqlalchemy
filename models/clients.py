@@ -105,8 +105,6 @@ class Client(BaseClass.Base):
             local_session.close()
 
         
-
-
     def update_client():
         
         connection_string = "sqlite+pysqlite:///M:/lab/projects/ip23/src/test.db"
@@ -134,8 +132,6 @@ class Client(BaseClass.Base):
             local_session.close()
 
         
-
-
     def order_client_by():
         
         connection_string = "sqlite+pysqlite:///M:/lab/projects/ip23/src/test.db"

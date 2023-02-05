@@ -1,12 +1,12 @@
 import sys
-from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, QWidget, QComboBox, QLineEdit, QDateEdit, QPushButton
+from PyQt6 import QtWidgets, QtGui
+from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, QWidget, QComboBox, QLineEdit, QDateEdit, QPushButton
 from datetime import datetime
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.title = "PyQt5 Database"
+        self.title = "PyQt6 Database"
         self.top = 200
         self.left = 500
         self.width = 400
@@ -64,5 +64,4 @@ class MainWindow(QMainWindow):
 # create an instance of the PyQt application
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    mw = MainWindow()
-    sys.exit(app.exec())
+    mw
